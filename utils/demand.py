@@ -1,7 +1,27 @@
+import pandas as pd
 import numpy as np
 import numpy.random as npr
 import numpy.typing as npt
+from typing import List, Tuple
 
+def get_distance(departure_commune : str, arrival_commune : str, df : pd.DataFrame) -> float:
+    """
+    Determine the distance between two communes based on a distance matrix.
+
+    :param departure_commune: The name of the departure commune.
+    :type departure_commune: str
+    :param arrival_commune: The name of the arrival commune.
+    :type arrival_commune: str
+    :param df: The DataFrame containing the distance matrix.
+    :type df: pd.DataFrame
+    :return: The distance between the two communes.
+    :rtype: float
+    """
+    if departure_commune == arrival_commune:
+        radius = df.loc[departure_commune, departure_commune]
+        return npr.random_integers(low = int(radius/2*1000), high = int(radius*1000))/1000
+    else:
+        return df.loc[departure_commune, departure_commune]
 
 def generate_weights(mu : float, sigma : float, size : int) -> npt.NDArray[np.float32]:
     """
@@ -32,3 +52,10 @@ def generate_people_counts(num_locations : int, min_people : int, max_people : i
     :rtype: np.ndarray
     """
     return npr.normal(low=min_people, high=max_people + 1, size=num_locations).round().astype(np.int32)
+
+
+def generate_demands(days : List[str], open_hours : List[Tuple[int]]) -> npt.NDArray[np.float32]:
+    demand_mtx : List[List[float]] = []
+    for i in range(len(days)):
+
+        demand_mtx.append([[] for _ in range((open_hours[i][1]-open_hours[i][0])*4)])

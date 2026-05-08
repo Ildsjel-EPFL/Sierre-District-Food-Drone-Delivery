@@ -12,8 +12,8 @@ def load_distances() -> Tuple[pd.DataFrame, pd.DataFrame]:
     :rtype: Tuple[pd.DataFrame, pd.DataFrame]
 
     """
-    # Implementation for loading distances
-    pass
+    return pd.read_excel(DATA_DIR / "distances.xlsx")
+    
 
 def load_demands() -> pd.DataFrame:
     """
