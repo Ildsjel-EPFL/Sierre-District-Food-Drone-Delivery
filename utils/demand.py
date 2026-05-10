@@ -23,6 +23,24 @@ def get_distance(departure_commune : str, arrival_commune : str, df : pd.DataFra
     else:
         return df.loc[departure_commune, departure_commune]
 
+def generate_elevation_gain(actual_altitude : float, departure_commune : str, arrival_commune : str, df : pd.DataFrame) -> float:
+    """
+    Generate a random elevation gain for a route between two communes.
+
+    :param actual_altitude: The current altitude of the drone.
+    :type actual_altitude: float
+    :param departure_commune: The name of the departure commune.
+    :type departure_commune: str
+    :param arrival_commune: The name of the arrival commune.
+    :type arrival_commune: str
+    :param df: The DataFrame containing the altitude information.
+    :type df: pd.DataFrame
+    :return: A random elevation gain for the route.
+    :rtype: float
+    """
+    random_arrival_altitude = npr.random_integers(low = int(df.loc[arrival_commune, "min"]), high = int(df.loc[arrival_commune, "max"]))
+    return random_arrival_altitude - actual_altitude
+
 def generate_weights(mu : float, sigma : float, size : int) -> npt.NDArray[np.float32]:
     """
     Generate random weights for the demand model based on a normal distribution.
@@ -53,8 +71,17 @@ def generate_people_counts(num_locations : int, min_people : int, max_people : i
     """
     return npr.normal(low=min_people, high=max_people + 1, size=num_locations).round().astype(np.int32)
 
-
 def generate_demands(days : List[str], open_hours : List[Tuple[int]]) -> npt.NDArray[np.float32]:
+    """
+    Generate a demand matrix for a given list of days and their corresponding open hours.
+    
+    :param days: A list of days for which to generate the demand matrix.
+    :type days: List[str]
+    :param open_hours: A list of tuples representing the open hours for each day.
+    :type open_hours: List[Tuple[int]]
+    :return: A demand matrix where each entry represents the demand for a specific time slot on a specific day.
+    :rtype: np.ndarray
+    """
     demand_mtx : List[List[float]] = []
     for i in range(len(days)):
 
