@@ -1,6 +1,5 @@
 import pandas as pd
 import math
-
 def calculate_optimized_fleet_size(demand_url, distribution_url, drone_capacity=15):
     """
     Fetches daily demand and hourly weights directly from Git repositories, 
