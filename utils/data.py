@@ -1,6 +1,8 @@
 import pandas as pd
 from typing import Tuple
 from pathlib import Path
+import numpy as np
+import numpy.typing as npt
 
 DATA_DIR = Path.cwd().parent / "data"
 
@@ -25,12 +27,12 @@ def communes_infos() -> pd.DataFrame:
     """
     return pd.read_excel(DATA_DIR / "communes_infos.xlsx", index_col=0)
 
-def load_demands() -> pd.DataFrame:
+def load_demands() -> npt.NDArray[np.float32]:
     """
     Load demand data from a CSV file.
 
-    :return: A DataFrame containing the demand data.
-    :rtype: pd.DataFrame
+    :return: A 3D numpy array containing the demand data.
+    :rtype: npt.NDArray[np.float32]
 
     """
     # Implementation for loading demand
