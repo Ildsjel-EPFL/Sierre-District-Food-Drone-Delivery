@@ -10,12 +10,15 @@ DAY_SHARES = {
     "Sunday": 0.079,
 }
 
+
+
 ORDER_FREQUENCY_DATA = pd.DataFrame({
     "category": ["Several times a week", "Around once a week", "2 to 3 times a month", "Around once a month", "Every 2 to 3 months", "1 to 2 times a year", "Less than 1 to 2 times a year", "Never / no longer ordering",],
     "share": [0.029, 0.095, 0.161, 0.168, 0.145, 0.088, 0.113, 0.201],
     "orders_per_week": [3,1,2.5 / 4.3,1 / 4.3,1 / (4.3 * 2.5),1.5 / 52.1,0.5 / 52.1,0,],
 })
 
+FAST_FOOD_SHARE = 0.50
 def compute_orders_per_user_per_week():
     ORDER_FREQUENCY_DATA["weighted_orders"] = (ORDER_FREQUENCY_DATA["share"] * ORDER_FREQUENCY_DATA["orders_per_week"])
     return ORDER_FREQUENCY_DATA["weighted_orders"].sum()
@@ -30,6 +33,7 @@ def load_population_data(path="data/communes_infos.xlsx"):
 def compute_weekly_demand(df, population_column="Citizens"):
     orders_per_user_per_week = compute_orders_per_user_per_week()
     df["weekly_demand"] = df[population_column] * orders_per_user_per_week
+    df["weekly_fast_food_demand"] = df["weekly_demand"] * FAST_FOOD_SHARE
     return df, orders_per_user_per_week
 
 def distribute_by_day(df):
@@ -39,6 +43,7 @@ def distribute_by_day(df):
 
 def main():
     print(ORDER_FREQUENCY_DATA)
+    print(f"Fast-food demand share = {FAST_FOOD_SHARE:.0%}")
     
     orders_per_user_per_week = compute_orders_per_user_per_week()
     print(f"\nOrders per user per week = {orders_per_user_per_week:.3f}")
