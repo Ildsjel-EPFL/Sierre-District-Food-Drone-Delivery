@@ -21,7 +21,7 @@ def get_distance(departure_commune : str, arrival_commune : str, df : pd.DataFra
         radius = df.loc[departure_commune, departure_commune]
         return npr.random_integers(low = int(radius/2*1000), high = int(radius*1000))/1000
     else:
-        return df.loc[departure_commune, departure_commune]
+        return df.loc[departure_commune, arrival_commune]
 
 def generate_elevation_gain(actual_altitude : float, departure_commune : str, arrival_commune : str, df : pd.DataFrame) -> float:
     """
@@ -39,7 +39,7 @@ def generate_elevation_gain(actual_altitude : float, departure_commune : str, ar
     :rtype: float
     """
     random_arrival_altitude = npr.random_integers(low = int(df.loc[arrival_commune, "min"]), high = int(df.loc[arrival_commune, "max"]))
-    return random_arrival_altitude - actual_altitude
+    return np.abs(random_arrival_altitude - actual_altitude)/1000
 
 def generate_weights(mu : float, sigma : float, size : int) -> npt.NDArray[np.float32]:
     """

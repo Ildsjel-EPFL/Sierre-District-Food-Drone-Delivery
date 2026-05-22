@@ -1,0 +1,8 @@
+pandas
+openpyxl 
+numpy
+ortools
+rich
+pyplot
+ipython
+jupyter
