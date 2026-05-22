@@ -53,7 +53,7 @@ def render_terminal_dashboard(current_time: datetime, round_energy_wh: float, to
     route_table.add_column("Flight Path", style="white")
     
     if not routes:
-        route_table.add_row("None", "[dim italic]No orders to process...[/dim italic]")
+        route_table.add_row("None", "[dim italic]No orders to process[/dim italic]")
     else:
         for idx, route in enumerate(routes):
             drone_id = f"Drone {used_drone_ids[idx]:02d}" 
@@ -75,7 +75,7 @@ def render_terminal_dashboard(current_time: datetime, round_energy_wh: float, to
 
     console.print(route_table)
     console.print(avail_table)
-    console.print("[dim]Solving next chunk...[/dim]")
+    console.print("[dim]Solving next chunk[/dim]")
 
 def plot_gantt_chart(drone_log: List[Dict]):
     """Renders an interactive Gantt chart using Plotly."""
@@ -103,7 +103,7 @@ def plot_demand_curves(hourly_weekly_demand_df: pd.DataFrame, commune_info_df: p
     
     demand_data = []
     # Use the same anchor date as the Gantt chart for consistency
-    simulation_start = datetime(2024, 1, 1, 0, 0) 
+    simulation_start = datetime(2026, 6, 1, 0, 0) 
     
     for day_idx, d in enumerate(weekdays):
         for h in range(10, 25): # 10:00 to 24:00
