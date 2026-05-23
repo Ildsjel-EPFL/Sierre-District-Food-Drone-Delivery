@@ -5,7 +5,7 @@ import pandas as pd
 # Load the pre-computed simulation data
 @st.cache_data
 def load_data():
-    with open("simulation_results.json", "r") as f:
+    with open("simulation_results_scenario_1.json", "r") as f:
         return json.load(f)
 
 history = load_data()
