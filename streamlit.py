@@ -115,30 +115,28 @@ with col_grid:
     st.markdown("### ⏱️ Fleet Availability")
     drones = current_frame["fleet_status"]["drones"]
     
-    # Create a nice visual grid using Markdown HTML
-    grid_html = "<div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;'>"
-    for d in drones:
-        d_id = f"D{d['id']:02d}"
-        time_left = d['minutes_until_ready']
+    # Define how many columns you want in the grid
+    num_cols = 4 
+    
+    # Create the rows of the grid dynamically
+    for i in range(0, len(drones), num_cols):
+        # Grab a chunk of 4 drones
+        chunk = drones[i:i + num_cols]
         
-        if time_left <= 0:
-            # Green pill for available
-            bg_color = "#d4edda"
-            text_color = "#155724"
-            status = "READY"
-        else:
-            # Red pill for flying
-            bg_color = "#f8d7da"
-            text_color = "#721c24"
-            status = f"{time_left:.1f}m"
+        # Create 4 Streamlit columns for this row
+        cols = st.columns(num_cols)
+        
+        for j, drone in enumerate(chunk):
+            d_id = f"D{drone['id']:02d}"
+            time_left = drone['minutes_until_ready']
             
-        grid_html += f"""
-        <div style='background-color: {bg_color}; color: {text_color}; padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 14px;'>
-            {d_id}<br><span style='font-size: 12px; font-weight: normal;'>{status}</span>
-        </div>
-        """
-    grid_html += "</div>"
-    st.markdown(grid_html, unsafe_allow_html=True)
+            with cols[j]:
+                if time_left <= 0:
+                    # Available (Green)
+                    st.success(f"**{d_id}**\n\nREADY")
+                else:
+                    # Flying (Red)
+                    st.error(f"**{d_id}**\n\n{time_left:.1f}m")
 
 
 # --- ANIMATION LOOP LOGIC ---
