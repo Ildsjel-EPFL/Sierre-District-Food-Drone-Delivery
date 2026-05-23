@@ -95,49 +95,50 @@ st.markdown("---")
 # Layout: Left column for Routes, Right column for Availability Grid
 col_routes, col_grid = st.columns([2, 1])
 
-# 5. Active Routes Table
-with col_routes:
-    st.markdown("### 🚁 Active Routes")
-    routes = current_frame["active_routes"]
-    if not routes:
-        st.info("No active flights this round.")
-    else:
-        df_routes = pd.DataFrame(routes)
-        # Format the path list into a readable string
-        df_routes['path'] = df_routes['path'].apply(lambda p: " ➔ ".join(p))
-        df_routes['drone_id'] = df_routes['drone_id'].apply(lambda d: f"D{d:02d}")
-        # Clean up column names for display
-        df_routes.rename(columns={"drone_id": "Drone", "path": "Flight Path", "distance_km": "Dist (km)", "energy_used_wh": "Energy (Wh)"}, inplace=True)
-        st.dataframe(df_routes, use_container_width=True, hide_index=True)
+# --- MAIN DASHBOARD AREA ---
+# (Keep your metrics row exactly as it is)
 
-# 6. Availability Grid
-with col_grid:
-    st.markdown("### ⏱️ Fleet Availability")
-    drones = current_frame["fleet_status"]["drones"]
-    
-    # Define how many columns you want in the grid
-    num_cols = 4 
-    
-    # Create the rows of the grid dynamically
-    for i in range(0, len(drones), num_cols):
-        # Grab a chunk of 4 drones
-        chunk = drones[i:i + num_cols]
-        
-        # Create 4 Streamlit columns for this row
-        cols = st.columns(num_cols)
-        
-        for j, drone in enumerate(chunk):
-            d_id = f"D{drone['id']:02d}"
-            time_left = drone['minutes_until_ready']
-            
-            with cols[j]:
-                if time_left <= 0:
-                    # Available (Green)
-                    st.success(f"**{d_id}**\n\nREADY")
-                else:
-                    # Flying (Red)
-                    st.error(f"**{d_id}**\n\n{time_left:.1f}m")
+st.markdown("---")
 
+# 5. Active Routes Table (Now taking full width)
+st.markdown("### 🚁 Active Routes")
+routes = current_frame["active_routes"]
+if not routes:
+    st.info("No active flights this round.")
+else:
+    df_routes = pd.DataFrame(routes)
+    # Format the path list into a readable string
+    df_routes['path'] = df_routes['path'].apply(lambda p: " ➔ ".join(p))
+    df_routes['drone_id'] = df_routes['drone_id'].apply(lambda d: f"D{d:02d}")
+    # Clean up column names for display
+    df_routes.rename(columns={"drone_id": "Drone", "path": "Flight Path", "distance_km": "Dist (km)", "energy_used_wh": "Energy (Wh)"}, inplace=True)
+    st.dataframe(df_routes, use_container_width=True, hide_index=True)
+
+st.markdown("---")
+
+# 6. Availability Grid (Now directly underneath, taking full width)
+st.markdown("### ⏱️ Fleet Availability")
+drones = current_frame["fleet_status"]["drones"]
+
+# Increased to 6 columns since we now have the full width of the page
+num_cols = 6 
+
+# Create the rows of the grid dynamically
+for i in range(0, len(drones), num_cols):
+    chunk = drones[i:i + num_cols]
+    cols = st.columns(num_cols)
+    
+    for j, drone in enumerate(chunk):
+        d_id = f"D{drone['id']:02d}"
+        time_left = drone['minutes_until_ready']
+        
+        with cols[j]:
+            if time_left <= 0:
+                # Available (Green)
+                st.success(f"**{d_id}**\n\nREADY")
+            else:
+                # Flying (Red)
+                st.error(f"**{d_id}**\n\n{time_left:.1f}m")
 
 # --- ANIMATION LOOP LOGIC ---
 # If playing, wait 3 seconds, increment frame, and force Streamlit to reload
