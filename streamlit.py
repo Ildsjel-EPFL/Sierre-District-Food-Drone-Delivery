@@ -74,7 +74,7 @@ st.sidebar.progress((st.session_state.current_step + 1) / total_steps)
 # --- MAIN DASHBOARD AREA ---
 current_frame = history[st.session_state.current_step]
 
-st.title(f"🚁 Scenario Replay: {selected_filename}")
+st.title(f"🎥 Simulation Replay: {selected_filename}")
 st.subheader(f"🕰️ Time: {current_frame['day']} - {current_frame['hour_chunk']}")
 
 # 4. Metrics Row
@@ -101,7 +101,7 @@ col_routes, col_grid = st.columns([2, 1])
 st.markdown("---")
 
 # 5. Active Routes Table (Now taking full width)
-st.markdown("### 🗺 New Routes")
+st.markdown("### 🎮 Drones taking off and their route")
 routes = current_frame["active_routes"]
 if not routes:
     st.info("No active flights this round.")
