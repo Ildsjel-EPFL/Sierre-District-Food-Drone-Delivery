@@ -6,3 +6,4 @@ rich
 pyplot
 ipython
 jupyter
+streamlit
