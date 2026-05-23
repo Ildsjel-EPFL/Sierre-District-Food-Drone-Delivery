@@ -3,7 +3,7 @@ openpyxl
 numpy
 ortools
 rich
-pyplot
+plotly
 ipython
 jupyter
 streamlit
