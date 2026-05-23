@@ -100,22 +100,32 @@ col_routes, col_grid = st.columns([2, 1])
 
 st.markdown("---")
 
-# 5. Active Routes Table (Now taking full width)
-st.markdown("### 🎮 Drones taking off and their route")
+# 5. Active Routes Table (Custom Card Layout)
+st.markdown("### 🚁 Active Routes")
 routes = current_frame["active_routes"]
+
 if not routes:
     st.info("No active flights this round.")
 else:
-    df_routes = pd.DataFrame(routes)
-    # Format the path list into a readable string
-    df_routes['path'] = df_routes['path'].apply(lambda p: " ➔ ".join(p))
-    df_routes['drone_id'] = df_routes['drone_id'].apply(lambda d: f"D{d:02d}")
-    # Clean up column names for display
-    df_routes.rename(columns={"drone_id": "Drone", "path": "Flight Path", "distance_km": "Dist (km)", "energy_used_wh": "Energy (Wh)"}, inplace=True)
-    st.dataframe(df_routes, use_container_width=True, hide_index=True)
-
-st.markdown("---")
-
+    # Use a fixed-height container so it scrolls if there are many active drones
+    # Adjust the height (e.g., 400) based on your preference
+    with st.container(height=450, border=False): 
+        for route in routes:
+            drone_id = f"D{route['drone_id']:02d}"
+            dist = route['distance_km']
+            energy = route['energy_used_wh']
+            path_str = " ➔ ".join(route['path'])
+            
+            # Create a visual "Card" for each route
+            with st.container(border=True):
+                # Top Row: The 3 compact metrics
+                c1, c2, c3 = st.columns(3)
+                c1.markdown(f"🚁 **Drone:** `{drone_id}`")
+                c2.markdown(f"📏 **Distance:** `{dist:.2f} km`")
+                c3.markdown(f"🔋 **Energy:** `{energy:.1f} Wh`")
+                
+                # Bottom Row: The full-width path
+                st.markdown(f"**Flight Path:** {path_str}")
 # 6. Availability Grid (Now directly underneath, taking full width)
 st.markdown("### ⏱️ Fleet Availability")
 drones = current_frame["fleet_status"]["drones"]
