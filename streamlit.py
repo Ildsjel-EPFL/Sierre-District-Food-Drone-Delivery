@@ -101,7 +101,7 @@ col_routes, col_grid = st.columns([2, 1])
 st.markdown("---")
 
 # 5. Active Routes Table (Now taking full width)
-st.markdown("### 🚁 Active Routes")
+st.markdown("### 🗺 New Routes")
 routes = current_frame["active_routes"]
 if not routes:
     st.info("No active flights this round.")
