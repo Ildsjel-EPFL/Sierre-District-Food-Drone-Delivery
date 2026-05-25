@@ -3,6 +3,7 @@ import json
 import pandas as pd
 import time
 import os
+from typing import List, Dict
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(page_title="Drone Fleet Replay", page_icon="🚁", layout="wide")
@@ -24,11 +25,19 @@ if "loaded_file" not in st.session_state:
 
 # --- DATA LOADING ---
 @st.cache_data
-def load_data(filepath):
+def load_data(filepath) -> List[Dict]:
+    """
+    Loads the simulation history from a JSON file. The file should contain a list of dictionaries, where each dictionary represents the state of the simulation at a given time step.
+    
+     :param filepath: The path to the JSON file containing the simulation history.
+     :type filepath: str
+     :return: A list of dictionaries representing the simulation history.
+     :rtype: List[Dict]
+     """
     with open(filepath, "r") as f:
         return json.load(f)
 
-def reset_simulation():
+def reset_simulation()-> None:
     """Resets the playback to the beginning."""
     st.session_state.current_step = 0
     st.session_state.is_playing = False
@@ -126,6 +135,7 @@ else:
                 
                 # Bottom Row: The full-width path
                 st.markdown(f"**Flight Path:** {path_str}")
+                
 # 6. Availability Grid (Now directly underneath, taking full width)
 st.markdown("### ⏱️ Fleet Availability")
 drones = current_frame["fleet_status"]["drones"]
@@ -162,44 +172,3 @@ if st.session_state.is_playing:
         st.session_state.is_playing = False
         st.toast("Simulation playback finished!", icon="✅")
         st.rerun()
-
-
-# import streamlit as st
-# import json
-# import pandas as pd
-
-# # Load the pre-computed simulation data
-# @st.cache_data
-# def load_data():
-#     with open("simulation_results_scenario_1.json", "r") as f:
-#         return json.load(f)
-
-# history = load_data()
-
-# st.title("🚁 Drone Fleet Simulation Replay")
-
-# # Create a slider to scrub through time (0 to total rounds)
-# step = st.slider("Timeline (15-min chunks)", min_value=0, max_value=len(history)-1, value=0)
-
-# # Get the snapshot for the current slider position
-# current_frame = history[step]
-
-# st.subheader(f"Time: {current_frame['day']} - {current_frame['hour_chunk']}")
-
-# # Display Metrics
-# col1, col2, col3 = st.columns(3)
-# col1.metric("Round Cost", f"CHF {current_frame['financials']['round_energy_cost_chf']:.2f}")
-# col2.metric("Successful Deliveries", current_frame['metrics']['cumulative_successful'])
-# col3.metric("Missed Deliveries", current_frame['metrics']['cumulative_missed'])
-
-# # Display Active Routes
-# st.markdown("### Active Routes")
-# routes = current_frame["active_routes"]
-# if not routes:
-#     st.info("No active flights this round.")
-# else:
-#     # Convert routes to a dataframe for a clean Streamlit table
-#     df_routes = pd.DataFrame(routes)
-#     # Convert list path to a string arrow format
-#     df_routes['path'] = df_routes['path'].apply(lambda p: " ➔ ".join(p)) 
-#     st.table(df_routes[['drone_id', 'path', 'distance_km']])

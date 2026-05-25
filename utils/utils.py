@@ -86,10 +86,10 @@ def cost_fct(weekly_operating_minutes: int, total_energy_consumed: float, n_dron
     :rtype: float
     """
     weekly_operating_hours = weekly_operating_minutes/60
-    capex = weekly_operating_hours*11000/4000*n_drones 
+    capex = weekly_operating_hours*13000/4000*n_drones 
     energy_cost = total_energy_consumed*0.00027 
     labor = weekly_operating_hours*(45*n_drones/5 + 25) 
-    maintenance = 231*n_drones  
+    maintenance = 57.7*n_drones  
     return capex + energy_cost + labor + maintenance
 
 def get_demand_mtx(hour: int, day: str, demand_threshold: float, hourly_weekly_demand_df: pd.DataFrame, commune_info_df: pd.DataFrame) -> npt.NDArray[np.int64]:
