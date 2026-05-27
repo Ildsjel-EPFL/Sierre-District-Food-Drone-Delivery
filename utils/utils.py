@@ -116,7 +116,8 @@ def get_demand_mtx(hour: int, day: str, demand_threshold: float, hourly_weekly_d
     demand_per_commune = commune_info_df.loc[:, "demand_"+day].to_numpy() * commune_info_df.loc[:, "weekly_fast_food_demand"].to_numpy() / commune_info_df.loc[:, "weekly_demand"].to_numpy()
     hourly_demand = hourly_share_of_daily_demand * demand_per_commune
     hourly_demand = threshold_fct(hourly_demand) 
-    return hourly_demand / 4 
+    # return hourly_demand / 4 * 0.5 # Scenario with 50% of the demand being for fast food delivery
+    return hourly_demand / 4
 
 def compute_flying_time(distance: float, elevation_gain: float) -> float:
     """
