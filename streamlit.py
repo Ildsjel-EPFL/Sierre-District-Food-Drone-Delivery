@@ -6,7 +6,7 @@ import os
 from typing import List, Dict
 
 # --- PAGE CONFIGURATION ---
-st.set_page_config(page_title="Drone Fleet Replay", page_icon="🚁", layout="wide")
+st.set_page_config(page_title="SiAIR Fleet Replay", page_icon="🚁", layout="wide")
 
 REPLAYS_DIR = "Replays"
 
@@ -83,7 +83,7 @@ st.sidebar.progress((st.session_state.current_step + 1) / total_steps)
 # --- MAIN DASHBOARD AREA ---
 current_frame = history[st.session_state.current_step]
 
-st.title(f"🎥 Simulation Replay: {selected_filename}")
+st.title(f"🎥 SiAIR Dashboard: {selected_filename}")
 st.subheader(f"🕰️ Time: {current_frame['day']} - {current_frame['hour_chunk']}")
 
 # 4. Metrics Row
